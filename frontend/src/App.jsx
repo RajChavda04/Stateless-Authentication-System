@@ -1,47 +1,44 @@
-import './App.css'
-import Login from "./pages/Login"
-import Register from "./pages/Register"
-import { HomePage } from "./pages/Home"
-import ForgotPasswordPage from "./pages/Forgot-password"
-import ProfilePage from "./pages/Profile"
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import {  useEffect, useState } from 'react'
-import { useAuth } from "./context/AuthContext.jsx";
-import ToastProvider from './components/ToastProvider.jsx'
+import "./App.css";
+import { BrowserRouter,  Routes, Route,  Navigate,} from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+import ToastProvider from "./components/ToastProvider";
 
-// Protected Route Component
-const ProtectedRoute = ({ element, user, loading }) => {
-  if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>
-  return user ? element : <Navigate to="/login" />
-}
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPasswordPage from "./pages/Forgot-password";
 
-// Login Route Component
-const LoginRoute = ({ element, user, loading }) => {
-  if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>
-  return user ? <Navigate to="/home" /> : element
-}
+import { HomePage } from "./pages/Home";
+import ProfilePage from "./pages/Profile";
 
-  function App() {
-  const { user,loading, logout } = useAuth()
-  
-  const handleLogout = () => {
-    logout()
-  }
+import DashboardPage from "./pages/admin/Dashboard";
+import SettingPage from "./pages/admin/Setting";
+
+import ProtectedRoute from "./routes/ProtectedRoute";
+import LoginRoute from "./routes/LoginRoute";
+import AdminRoute from "./routes/AdminRoute";
+
+function App() {
+  const { user, loading } = useAuth();
 
   return (
     <BrowserRouter>
-     <ToastProvider />
-        <Routes>
-          <Route path="/login" element={<LoginRoute element={<Login />} user={user} loading={loading} />} />
-          <Route path="/register" element={<LoginRoute element={<Register />} user={user} loading={loading} />} />
-          <Route path="/forgot-password" element={<LoginRoute element={<ForgotPasswordPage />} user={user} loading={loading} />} />
-          <Route path="/home" element={<ProtectedRoute element={<HomePage user={user} onLogout={handleLogout} />} user={user} loading={loading} />} />
-          <Route path="/profile" element={<ProtectedRoute element={<ProfilePage user={user} />} user={user} loading={loading} />} />
-          <Route path="/" element={<Navigate to={user ? "/home" : "/login"} />} />
-        </Routes>
-     
+      <ToastProvider />
+      <Routes>
+        {/* Public */}
+       <Route path="/login" element={<LoginRoute user={user} loading={loading}> <Login /> </LoginRoute>}/>
+        <Route path="/register"  element={<LoginRoute user={user} loading={loading}> <Register/> </LoginRoute>}/>
+        <Route path="/forgot-password" element={<LoginRoute user={user} loading={loading}> <ForgotPasswordPage/> </LoginRoute> }/>
+        {/* User */}
+        <Route path="/home" element={ <ProtectedRoute user={user} loading={loading}><HomePage user={user} /></ProtectedRoute> } />
+        <Route path="/profile"  element={ <ProtectedRoute user={user} loading={loading}> <ProfilePage /></ProtectedRoute> }/>
+        {/* Admin */}
+        <Route path="/admin/dashboard" element={ <AdminRoute user={user} loading={loading}> <DashboardPage /> </AdminRoute>} />
+        <Route path="/admin/setting" element={ <AdminRoute user={user} loading={loading} ><SettingPage /></AdminRoute> }/>
+        {/* Root */}
+        <Route path="/" element={ <Navigate replace to={ !user ? "/login" : user.role === "admin" ? "/admin/dashboard" : "/home" }  />}/>
+      </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

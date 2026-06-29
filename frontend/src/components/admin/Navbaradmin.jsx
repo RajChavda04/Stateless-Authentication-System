@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from "framer-motion";
 import { useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import { Moon, User, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -16,16 +16,16 @@ const Navbar = () => {
       >
         {/* LEFT: Logo + Name */}
         <div className="flex items-center gap-6">
-          <Link to="/home">
+          <Link to="/admin/dashboard">
             <div className="flex items-center gap-3">
               <h1 className={`text-lg sm:text-xl font-bold ${isDark ? "text-white" : "text-black"}`}>
-                 User Panel
+                 Admin Panel
               </h1>
             </div>
           </Link>
 
           <Link
-            to="/home"
+            to="/admin/dashboard"
             className={`text-sm sm:text-base font-medium transition-colors duration-300 ${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"
               }`}
           >
@@ -49,7 +49,7 @@ const Navbar = () => {
           </motion.button>
 
           {/* Logout */}
-          <Link to="/profile">
+          <Link to="/admin/setting">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

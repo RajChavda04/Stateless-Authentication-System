@@ -306,9 +306,14 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
-
-    if (!email || !password || !role) {
+    // const { email, password, role } = req.body;
+    const { email, password} = req.body;
+   
+    // if (!email || !password || !role) {
+    //   return res.status(400).json({ message: "all fields are required" });
+    // }
+   
+    if (!email || !password ) {
       return res.status(400).json({ message: "all fields are required" });
     }
    
@@ -322,17 +327,23 @@ export const login = async (req, res) => {
       });
     }
 
-    let user;
+   // --- for two login page dedicated for admin and users------ 
+    // let user,
+    // if (role === "admin") {
+    //   user = await adminModel.findOne({ email });
+    // } else {
+    //   user = await userModel.findOne({ email });
+    // }
 
-    if (role === "admin") {
-      user = await adminModel.findOne({ email });
-    } else {
-      user = await userModel.findOne({ email });
-    }
+    // ---- for single login page for both admin and users ----
+    let user = await adminModel.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      user = await userModel.findOne({ email });
     }
+    if (!user) {
+       return res.status(401).json({ message: "Invalid email or password" });
+     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {

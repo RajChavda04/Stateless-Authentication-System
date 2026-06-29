@@ -44,7 +44,11 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await api.get("/api/auth/getme");
       const profile = data?.user || data?.data?.user || data;
-      setUser(normalizeUser(profile));
+      const normalizedUser = normalizeUser(profile);
+
+      setUser(normalizedUser);
+
+      return normalizedUser;
     } catch (error) {
       setUser(null);
       if (error?.response?.status !== 401) {
@@ -68,9 +72,11 @@ export function AuthProvider({ children }) {
     async (email, password) => {
       setAuthLoading(true);
       try {
-        await api.post("/api/auth/login", { email, password, role: "user" });
-        await fetchProfile();
+        // await api.post("/api/auth/login", { email, password, role: "user" });
+        await api.post("/api/auth/login", { email, password });
+        const profile = await fetchProfile();
         toast.success("Login Successful");
+        return profile;
       } catch (error) {
         handleError(error, "Unable to login");
       } finally {

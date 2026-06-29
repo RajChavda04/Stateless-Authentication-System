@@ -27,23 +27,26 @@ export default function LoginPage() {
     e.preventDefault();
     if (!validate()) return;
     try {
-      await login(email, password);
-      navigate("/home");
+      const profile = await login(email, password);
+      if (!profile) return;
+      navigate(
+        profile.role === "admin"
+          ? "/admin/dashboard"
+          : "/home"
+      );
     } catch {
       setErrors({ form: "Login failed. Please check your credentials." });
     }
   };
 
   return (
-    <div className={`min-h-screen p-5 overflow-hidden sm:p-2 flex items-center justify-center transition-colors duration-300 ${
-      isDark ? "bg-gradient-to-br from-gray-900 to-gray-800" : "bg-gradient-to-br from-gray-100 to-gray-200"
-    }`}>
+    <div className={`min-h-screen p-5 overflow-hidden sm:p-2 flex items-center justify-center transition-colors duration-300 ${isDark ? "bg-gradient-to-br from-gray-900 to-gray-800" : "bg-gradient-to-br from-gray-100 to-gray-200"
+      }`}>
 
       {/* Theme toggle */}
       <motion.button
-        className={`absolute top-6 right-6 p-2 rounded-lg transition-colors duration-300 ${
-          isDark ? "bg-gray-800 text-yellow-400 cursor-pointer hover:bg-gray-700" : "bg-gray-200 text-gray-800 cursor-pointer hover:bg-gray-300"
-        }`}
+        className={`absolute top-6 right-6 p-2 rounded-lg transition-colors duration-300 ${isDark ? "bg-gray-800 text-yellow-400 cursor-pointer hover:bg-gray-700" : "bg-gray-200 text-gray-800 cursor-pointer hover:bg-gray-300"
+          }`}
         onClick={toggleTheme}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -56,9 +59,8 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className={`w-full max-w-md shadow-xl rounded-2xl p-4 sm:p-8 transition-colors duration-300 ${
-          isDark ? "bg-gray-800" : "bg-white"
-        }`}
+        className={`w-full max-w-md shadow-xl rounded-2xl p-4 sm:p-8 transition-colors duration-300 ${isDark ? "bg-gray-800" : "bg-white"
+          }`}
       >
         <h2 className={`text-2xl font-bold text-center mb-6 ${isDark ? "text-white" : "text-black"}`}>
           Welcome Back
@@ -70,9 +72,8 @@ export default function LoginPage() {
             <label className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}>
               Email
             </label>
-            <div className={`flex items-center border rounded-lg mt-1 px-3 focus-within:ring-2 ${
-              isDark ? "border-gray-600 focus-within:ring-blue-500 bg-gray-700" : "border-gray-300 focus-within:ring-black bg-white"
-            }`}>
+            <div className={`flex items-center border rounded-lg mt-1 px-3 focus-within:ring-2 ${isDark ? "border-gray-600 focus-within:ring-blue-500 bg-gray-700" : "border-gray-300 focus-within:ring-black bg-white"
+              }`}>
               <Mail size={18} className={isDark ? "text-gray-500" : "text-gray-400"} />
               <input
                 type="email"
@@ -90,9 +91,8 @@ export default function LoginPage() {
             <label className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}>
               Password
             </label>
-            <div className={`flex items-center border rounded-lg mt-1 px-3 focus-within:ring-2 ${
-              isDark ? "border-gray-600 focus-within:ring-blue-500 bg-gray-700" : "border-gray-300 focus-within:ring-black bg-white"
-            }`}>
+            <div className={`flex items-center border rounded-lg mt-1 px-3 focus-within:ring-2 ${isDark ? "border-gray-600 focus-within:ring-blue-500 bg-gray-700" : "border-gray-300 focus-within:ring-black bg-white"
+              }`}>
               <Lock size={18} className={isDark ? "text-gray-500" : "text-gray-400"} />
               <input
                 type={showPassword ? "text" : "password"}
@@ -128,9 +128,8 @@ export default function LoginPage() {
             whileTap={{ scale: 0.97 }}
             type="submit"
             disabled={authLoading}
-            className={`w-full py-2 rounded-lg font-medium transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-              isDark ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-black text-white hover:bg-gray-800"
-            }`}
+            className={`w-full py-2 rounded-lg font-medium transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${isDark ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-black text-white hover:bg-gray-800"
+              }`}
           >
             {authLoading ? (
               <span className="flex items-center justify-center gap-2">

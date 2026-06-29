@@ -5,65 +5,6 @@ import adminModel from "../models/admin.model.js";
 import config from "../config/env.js";
 import ROLES from "../constants/roles.js";
 
-export const login = async(req,res)=>{
-    try{
-
-        const {
-            email,
-            password
-        } = req.body;
-
-        const admin =
-            await adminModel.findOne({
-                email
-            });
-
-        if(!admin){
-            return res.status(401).json({
-                message:"invalid credentials"
-            });
-        }
-
-        const isMatch =
-            await bcrypt.compare(
-                password,
-                admin.password
-            );
-
-        if(!isMatch){
-            return res.status(401).json({
-                message:"invalid credentials"
-            });
-        }
-
-        const accessToken =
-            jwt.sign(
-                {
-                    id: admin._id,
-                    role: ROLES.ADMIN,
-                    type: "ACCESS",
-                },
-                config.JWT_SECRET,
-                {
-                    expiresIn: "7d",
-                }
-            );
-
-        res.status(200).json({
-            message:"login successful",
-            accessToken
-        });
-
-    }catch(err){
-
-        console.log(err);
-
-        res.status(500).json({
-            message:"something went wrong"
-        });
-
-    }
-}
 
 export const getProfile = async(req,res)=>{
     try{
