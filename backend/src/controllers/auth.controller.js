@@ -491,6 +491,47 @@ export const getMe = async (req, res) => {
   }
 };
 
+export const updateProfile = async (req, res) => {
+  try {
+    const { fullname,  phone,} = req.body;
+    const user = await userModel.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (fullname?.trim()) { user.fullname = fullname.trim();}
+
+    if (phone?.trim()) {
+      const existingPhone = await userModel.findOne({ phone, _id: { $ne: user._id }, });
+      if (existingPhone) {
+        return res.status(400).json({
+          success: false,
+          message: "Phone number already exists",
+        });
+      }
+      user.phone = phone.trim();
+    }
+    await user.save();
+    const updatedUser = await userModel.findById(user._id).select("-password");
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;

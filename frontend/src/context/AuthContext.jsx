@@ -217,7 +217,7 @@ export function AuthProvider({ children }) {
   const updateProfile = useCallback(
     async (profileData) => {
       try {
-        const { data } = await api.put("/api/users/profile", profileData);
+        const { data } = await api.put("/api/auth/updateprofile", profileData);
         const updatedUser = data?.user || data?.data?.user;
         if (updatedUser) setUser(normalizeUser(updatedUser));
         toast.success("Profile updated successfully");

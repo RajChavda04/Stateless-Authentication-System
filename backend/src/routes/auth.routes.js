@@ -5,6 +5,7 @@ import {
     resendOtp,login,
     refreshToken,
     getMe,
+    updateProfile,
     forgotPassword,
     resetPassword,
     logout,
@@ -24,6 +25,7 @@ authRouter.post("/resendotp", resendOtp)
 authRouter.post("/login", login)
 authRouter.get("/refreshtokengeneration", refreshToken)
 authRouter.get("/getme", authMiddleware, getMe)
+authRouter.put("/updateprofile", authMiddleware, updateProfile)
 authRouter.post("/forgot-password", forgotPassword)
 authRouter.post("/reset-password", resetPassword)
 authRouter.post("/logout", authMiddleware, logout);
