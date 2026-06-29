@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import adminModel from "../models/admin.model.js";
+import userModel from "../models/user.model.js";
 import config from "../config/env.js";
 import ROLES from "../constants/roles.js";
 

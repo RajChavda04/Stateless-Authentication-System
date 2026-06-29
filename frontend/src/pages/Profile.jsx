@@ -42,7 +42,6 @@ export default function ProfilePage() {
   // ── Profile fields ────────────────────────────────────────────
   const [form, setForm] = useState({
     name: "", email: "", phone: "",
-    gender: "", dateOfBirth: "", city: "", state: "",
   });
   const [formErrors, setFormErrors] = useState({});
 

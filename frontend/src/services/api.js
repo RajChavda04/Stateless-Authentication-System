@@ -30,12 +30,8 @@ API.interceptors.response.use(
       originalRequest &&
       !originalRequest._retry
     ) {
-      // ✅ Never retry these routes
+     
       if (originalRequest.url?.includes("/api/auth/login")) {
-        return Promise.reject(error);
-      }
-
-      if (originalRequest.url?.includes("/api/auth/getme")) {
         return Promise.reject(error);
       }
 

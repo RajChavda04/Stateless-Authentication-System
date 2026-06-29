@@ -9,7 +9,7 @@ import { sendEmail } from "../utils/sendEmail.js";
 import { generateOtp } from "../utils/generateOtp.js";
 import otpTemplate from "../templates/otp.template.js";
 import { logger } from "../utils/logger.js";
-import adminModel from "../models/admin.model.js";
+// import adminModel from "../models/admin.model.js";
 import notificationModel from "../models/notification.model.js";
 import NOTIFICATION_TYPE from "../constants/notificationType.js";
 import { emitNotification } from "../sockets/notification.socket.js";
@@ -336,11 +336,8 @@ export const login = async (req, res) => {
     // }
 
     // ---- for single login page for both admin and users ----
-    let user = await adminModel.findOne({ email });
+    let user = await userModel.findOne({ email });
 
-    if (!user) {
-      user = await userModel.findOne({ email });
-    }
     if (!user) {
        return res.status(401).json({ message: "Invalid email or password" });
      }
@@ -420,13 +417,7 @@ export const refreshToken = async (req, res) => {
       });
     }
 
-    let user;
-
-    if (decoded.role === "admin") {
-      user = await adminModel.findById(decoded.id);
-    } else {
-      user = await userModel.findById(decoded.id);
-    }
+    let user = await userModel.findById(decoded.id);
     if (!user) {
       return res.status(401).json({ message: "Invalid refresh token" });
     }
@@ -478,14 +469,9 @@ export const refreshToken = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    let user;
 
-    if (req.user.role === "admin") {
-      user = await adminModel.findById(req.user.id);
-    } else {
-      user = await userModel.findById(req.user.id);
-    }
-
+    let user = await userModel.findById(req.user.id).select("-password");
+    
     if (!user) {
       return res.status(404).json({
         message: "user not found",
