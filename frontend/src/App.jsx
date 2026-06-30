@@ -13,7 +13,7 @@ import ProfilePage from "./pages/Profile";
 import DashboardPage from "./pages/admin/Dashboard";
 import SettingPage from "./pages/admin/Setting";
 
-import ProtectedRoute from "./routes/ProtectedRoute";
+import UserRoute from "./routes/UserRoute";
 import LoginRoute from "./routes/LoginRoute";
 import AdminRoute from "./routes/AdminRoute";
 
@@ -29,8 +29,8 @@ function App() {
         <Route path="/register"  element={<LoginRoute user={user} loading={loading}> <Register/> </LoginRoute>}/>
         <Route path="/forgot-password" element={<LoginRoute user={user} loading={loading}> <ForgotPasswordPage/> </LoginRoute> }/>
         {/* User */}
-        <Route path="/home" element={ <ProtectedRoute user={user} loading={loading}><HomePage user={user} /></ProtectedRoute> } />
-        <Route path="/profile"  element={ <ProtectedRoute user={user} loading={loading}> <ProfilePage /></ProtectedRoute> }/>
+        <Route path="/home" element={ <UserRoute user={user} loading={loading}><HomePage user={user} /></UserRoute> } />
+        <Route path="/profile"  element={ <UserRoute user={user} loading={loading}> <ProfilePage /></UserRoute> }/>
         {/* Admin */}
         <Route path="/admin/dashboard" element={ <AdminRoute user={user} loading={loading}> <DashboardPage /> </AdminRoute>} />
         <Route path="/admin/setting" element={ <AdminRoute user={user} loading={loading} ><SettingPage /></AdminRoute> }/>
